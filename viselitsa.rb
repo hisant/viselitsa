@@ -9,17 +9,18 @@ end
 
 current_path = "./" + File.dirname(__FILE__)
 
-require "active_support/all"
-require current_path + "/game.rb"
-require current_path + "/result_printer.rb"
-require current_path + "/word_reader.rb"
+require "unicode_utils/upcase"
+require "unicode_utils/downcase"
+require_relative "game"
+require_relative "result_printer"
+require_relative "word_reader"
 
 reader = WordReader.new
-word = reader.read_from_file(current_path + '/data/words.txt')
+word = reader.read_from_file("#{current_path}/data/words.txt")
 printer = ResultPrinter.new
 game = Game.new(word)
 
-while game.status == 0 do
+while game.status.zero? do
   printer.print_status(game, word)
   game.ask_next_letter
 end

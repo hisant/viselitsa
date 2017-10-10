@@ -1,5 +1,4 @@
 class ResultPrinter
-
   def initialize
     @status_image = []
     current_path = File.dirname(__FILE__)
@@ -30,7 +29,8 @@ class ResultPrinter
 
   def print_status(game, word) # - ссылка на класс Игра
     cls
-    puts "\nСлово: " + get_word_for_print(game.letters, game.good_letters)
+    word_to_guess = get_word_for_print(game.letters, game.good_letters)
+    puts "\nСлово: #{word_to_guess}"
     puts "Ошибки (#{game.errors}): #{game.bad_letters.join(", ")}"
 
     print_viselitsa(game.errors)
@@ -38,12 +38,12 @@ class ResultPrinter
 
     if game.errors >= 7
       puts "Вы проиграли :("
-      puts "Было загадано слово: " + @word.to_s
+      puts "Было загадано слово: #{@word.to_s}"
     else
       if game.letters.uniq.size == game.good_letters.size
         puts "Поздравляем! Вы выиграли!\n\n"
       else
-        puts "У вас осталось попыток: " + (7-game.errors).to_s
+        puts "У вас осталось попыток: #{(7-game.errors)}"
       end
     end
   end

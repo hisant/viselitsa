@@ -1,5 +1,4 @@
 class Game
-
   def initialize(word)
     @letters = get_letters(word)
     @errors = 0
@@ -21,7 +20,7 @@ class Game
     letter = ""
 
     while letter == "" do
-      letter = STDIN.gets.encode("UTF-8").mb_chars.downcase.chomp
+      letter = UnicodeUtils.downcase(STDIN.gets.encode("UTF-8").chomp)
     end
 
     next_step(letter)
