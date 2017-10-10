@@ -9,7 +9,6 @@ end
 
 current_path = "./" + File.dirname(__FILE__)
 
-require "unicode_utils/upcase"
 require "unicode_utils/downcase"
 require_relative "game"
 require_relative "result_printer"
