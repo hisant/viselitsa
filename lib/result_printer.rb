@@ -1,7 +1,6 @@
 class ResultPrinter
-  def initialize
+  def initialize(current_path)
     @status_image = []
-    current_path = File.dirname(__FILE__)
     counter = 0
 
     while counter <= 7 do
