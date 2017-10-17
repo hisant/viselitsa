@@ -14,12 +14,15 @@ require "#{current_path}/lib/game.rb"
 require "#{current_path}/lib/result_printer.rb"
 require "#{current_path}/lib/word_reader.rb"
 
+VERSION = "Игра \"Виселица\", версия 3."
+
 reader = WordReader.new
 word = reader.read_from_file("#{current_path}/data/words.txt")
-printer = ResultPrinter.new(current_path)
 game = Game.new(word)
+game.version = VERSION
+printer = ResultPrinter.new(current_path, game)
 
-while game.status.zero? do
+while game.in_progress? do
   printer.print_status(game, word)
   game.ask_next_letter
 end

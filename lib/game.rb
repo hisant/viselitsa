@@ -1,15 +1,21 @@
 class Game
+  attr_reader :errors, letters, good_letters, bad_letters
+
+  attr_accessor :version, status
+
+  MAX_ERRORS = 7
+
   def initialize(word)
     @letters = get_letters(word)
     @errors = 0
     @good_letters = []
     @bad_letters = []
-    @status = 0
+    @status = :in_progress # :won, :lost
   end
 
   def get_letters(word)
-    if (word == nil || word == "")
-      abort "Вы не ввели слово для игры"
+    if word == nil || word == ""
+      abort "Слово не найдено"
     end
 
     word.split("")
@@ -26,49 +32,67 @@ class Game
     next_step(letter)
   end
 
+  def max_errors
+    MAX_ERRORS
+  end
+
+  def errors_left
+    MAX_ERRORS - @errors
+  end
+
+  def is_good?(letter)
+    letters.include?(letter) ||
+      (letter == "е" && letters.include?("ё")) ||
+      (letter == "ё" && letters.include?("е")) ||
+      (letter == "и" && letters.include?("й")) ||
+      (letter == "й" && letters.include?("и"))
+  end
+
+  def add_letter_to(letters, letter)
+    letters << letter
+
+    case letter
+      when "и" then letters << "й"
+      when "й" then letters << "и"
+      when "е" then letters << "ё"
+      when "ё" then letters << "е"
+    end
+  end
+
+  def solved?
+    good_letters.size == @letters.uniq.size
+  end
+
+  def lost?
+    @status == :lost || @errors >= MAX_ERRORS
+  end
+
+  def repeated?(letter)
+    @good_letters.include?(letter) || @bad_letters.include?(letter)
+  end
+
+  def in_progress?
+    @status == :in_progress
+  end
+
+  def won?
+    @status == :won
+  end
+
   def next_step(letter)
-    if @status == -1 || @status == 1
-      return # ничего не возвращает, но прерывает метод
-    end
+    return if status == :lost || status == :won
+    return if repeated?(letter)
 
-    if @good_letters.include?(letter) || @bad_letters.include?(letter)
-      return
-    end
+    if is_good?(letter)
+      add_letter_to(@good_letters, letter)
 
-    if @letters.include?(letter)
-      @good_letters << letter
-
-      if @good_letters.size == @letters.uniq.size
-        @status = 1
-      end
-
+      self.status = :won if solved?
     else
-      @bad_letters << letter
-      @errors += 1
+      add_letter_to(@bad_letters, letter)
 
-      if @errors >= 7
-        @status = -1
-      end
+      @errors += :won
+
+     self. status = :lost if lost?
     end
-  end
-
-  def letters
-    @letters
-  end
-
-  def good_letters
-    @good_letters
-  end
-
-  def bad_letters
-    @bad_letters
-  end
-
-  def status
-    @status
-  end
-
-  def errors
-    @errors
   end
 end
