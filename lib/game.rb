@@ -1,7 +1,7 @@
 class Game
-  attr_reader :errors, letters, good_letters, bad_letters
+  attr_reader :errors, :letters, :good_letters, :bad_letters
 
-  attr_accessor :version, status
+  attr_accessor :version, :status
 
   MAX_ERRORS = 7
 
@@ -60,7 +60,7 @@ class Game
   end
 
   def solved?
-    good_letters.size == @letters.uniq.size
+    (@letters - @good_letters).empty?
   end
 
   def lost?
@@ -90,9 +90,9 @@ class Game
     else
       add_letter_to(@bad_letters, letter)
 
-      @errors += :won
+      @errors += 1
 
-     self. status = :lost if lost?
+     self.status = :lost if lost?
     end
   end
 end
